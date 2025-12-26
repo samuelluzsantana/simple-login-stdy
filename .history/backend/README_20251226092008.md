@@ -1,0 +1,222 @@
+# Backend - API de Autenticação
+
+API REST para autenticação de usuários construída com Bun e TypeScript.
+
+## 🚀 Tecnologias
+
+- **Bun** - Runtime JavaScript rápido
+- **TypeScript** - Tipagem estática
+- **API REST** - Endpoints HTTP
+
+## 📁 Estrutura de Pastas
+
+```
+backend/
+├── src/
+│   └── index.ts        # Servidor principal e rotas
+├── package.json
+├── tsconfig.json
+└── bun.lock
+```
+
+## 🛠️ Instalação
+
+```bash
+# Instalar dependências
+bun install
+```
+
+## 💻 Desenvolvimento
+
+```bash
+# Iniciar servidor com hot reload
+bun run dev
+```
+
+Servidor rodando em: http://localhost:3001
+
+## 🏗️ Produção
+
+```bash
+# Iniciar servidor
+bun run start
+```
+
+## 📡 API Endpoints
+
+### POST `/api/register`
+
+Cadastra um novo usuário.
+
+**Request Body:**
+
+```json
+{
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "password": "123456"
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "message": "Usuário cadastrado com sucesso",
+  "user": {
+    "id": 1,
+    "name": "João Silva",
+    "email": "joao@email.com"
+  }
+}
+```
+
+**Erros:**
+
+- `400` - Campos obrigatórios faltando
+- `400` - Email já cadastrado
+
+---
+
+### POST `/api/login`
+
+Realiza login de um usuário.
+
+**Request Body:**
+
+```json
+{
+  "email": "joao@email.com",
+  "password": "123456"
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "message": "Login realizado com sucesso",
+  "user": {
+    "id": 1,
+    "name": "João Silva",
+    "email": "joao@email.com"
+  }
+}
+```
+
+**Erros:**
+
+- `401` - Email ou senha inválidos
+
+## 🔧 Configuração CORS
+
+A API está configurada para aceitar requisições de qualquer origem:
+
+```typescript
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+```
+
+Para produção, substitua `*` pela URL do seu frontend.
+
+## 💾 Banco de Dados
+
+Atualmente utiliza armazenamento em memória (array). Para produção, integre com:
+
+- **PostgreSQL** - `bun add pg`
+- **MySQL** - `bun add mysql2`
+- **MongoDB** - `bun add mongodb`
+- **Prisma** - `bun add prisma @prisma/client`
+
+### Exemplo com Prisma:
+
+```typescript
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+// Criar usuário
+const user = await prisma.user.create({
+  data: { name, email, password: hashedPassword },
+});
+```
+
+## 🔐 Segurança (Produção)
+
+Para ambiente de produção, implemente:
+
+1. **Hash de senhas** com bcrypt:
+
+```typescript
+import { hash, compare } from "bcryptjs";
+
+const hashedPassword = await hash(password, 10);
+const isValid = await compare(password, hashedPassword);
+```
+
+2. **JWT** para autenticação:
+
+```typescript
+import jwt from "jsonwebtoken";
+
+const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+```
+
+3. **Validação** com Zod:
+
+```typescript
+import { z } from "zod";
+
+const registerSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+```
+
+## 📜 Scripts Disponíveis
+
+| Script          | Descrição                      |
+| --------------- | ------------------------------ |
+| `bun run dev`   | Inicia servidor com hot reload |
+| `bun run start` | Inicia servidor de produção    |
+
+## 🧪 Testando a API
+
+Com curl:
+
+```bash
+# Cadastrar usuário
+curl -X POST http://localhost:3001/api/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"João","email":"joao@email.com","password":"123456"}'
+
+# Fazer login
+curl -X POST http://localhost:3001/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"joao@email.com","password":"123456"}'
+```
+
+## 📊 Arquitetura
+
+```
+Cliente (Frontend)
+       │
+       ▼
+┌──────────────────┐
+│   API (Bun)      │
+│   :3001          │
+├──────────────────┤
+│  POST /register  │
+│  POST /login     │
+└──────────────────┘
+       │
+       ▼
+┌──────────────────┐
+│  Banco de Dados  │
+│  (em memória)    │
+└──────────────────┘
+```
