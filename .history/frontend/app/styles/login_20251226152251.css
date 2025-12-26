@@ -81,6 +81,107 @@
   }
 }
 
+/* Decorative Elements */
+.decoration {
+  position: absolute;
+  display: flex;
+  z-index: 1;
+  align-items: center;
+  gap: 0;
+}
+
+.decoration.top-left {
+  top: 80px;
+  left: 60px;
+}
+
+.decoration.top-right {
+  top: 80px;
+  right: 60px;
+}
+
+.decoration.bottom-left {
+  bottom: 80px;
+  left: 60px;
+}
+
+.decoration.bottom-right {
+  bottom: 80px;
+  right: 60px;
+}
+
+.chip {
+  background: #e8ecf0;
+  border: 1px solid #d0d5dc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chip-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.chip-dots span {
+  width: 4px;
+  height: 4px;
+  background: #a0a8b3;
+  border-radius: 50%;
+}
+
+.chip-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.chip-lines span {
+  width: 40px;
+  height: 2px;
+  background: #c5ccd4;
+  border-radius: 1px;
+}
+
+.connector {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, #c5ccd4 0%, #d5dae0 50%, #c5ccd4 100%);
+  position: relative;
+}
+
+.connector::before,
+.connector::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: #c5ccd4;
+  border-radius: 50%;
+}
+
+.connector::before {
+  left: -3px;
+}
+
+.connector::after {
+  right: -3px;
+}
+
+.node {
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border: 3px solid #3b82f6;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+
 /* Login Card */
 .login-card {
   background: rgba(255, 255, 255, 0.95);
@@ -260,6 +361,7 @@
 /* Social Buttons */
 .social-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
 }
@@ -296,38 +398,23 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .login-container {
-    padding: 16px;
-  }
-
   .login-card {
     margin: 20px;
     padding: 32px 24px;
-    max-width: 100%;
-  }
-
-  .login-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .input-group {
-    flex: 1 1 100%;
-    min-width: 0;
   }
 
   .social-buttons {
     flex-wrap: wrap;
-    justify-content: center;
   }
 
   .social-button {
-    flex: 0 1 auto;
+    flex: 1;
+    min-width: 60px;
   }
 
   .logo-container {
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .code-dots {
@@ -343,17 +430,13 @@
   }
 
   .requirements-list {
-    flex-wrap: wrap;
+    gap: 4px;
   }
 }
 
 @media (max-width: 480px) {
-  .login-container {
-    padding: 12px;
-  }
-
   .login-card {
-    margin: 10px;
+    margin: 12px;
     padding: 24px 16px;
   }
 
@@ -375,23 +458,19 @@
     font-size: 15px;
   }
 
-  .social-buttons {
-    gap: 8px;
-  }
-
   .social-button {
-    width: 60px;
+    width: auto;
     height: 44px;
   }
 
   .language-switcher {
-    top: 10px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
   }
 
   .lang-link {
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 

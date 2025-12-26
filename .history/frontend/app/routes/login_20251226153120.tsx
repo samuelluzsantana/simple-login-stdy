@@ -43,6 +43,75 @@ export default function Login() {
         </Link>
       </div>
 
+      {/* Decorative elements */}
+      <div className="decoration top-left">
+        <div className="chip">
+          <div className="chip-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div className="chip-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div className="connector horizontal"></div>
+        <div className="node"></div>
+      </div>
+
+      <div className="decoration top-right">
+        <div className="node"></div>
+        <div className="connector horizontal"></div>
+        <div className="chip">
+          <div className="chip-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div className="chip-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+
+      <div className="decoration bottom-left">
+        <div className="chip">
+          <div className="chip-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div className="chip-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div className="connector horizontal"></div>
+        <div className="node"></div>
+      </div>
+
+      <div className="decoration bottom-right">
+        <div className="node"></div>
+        <div className="connector horizontal"></div>
+        <div className="chip">
+          <div className="chip-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div className="chip-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+
       {/* Login Card */}
       <div className="login-card">
         {/* Logo */}

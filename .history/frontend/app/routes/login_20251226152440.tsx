@@ -6,7 +6,7 @@ import {
   getLocalizedPath,
 } from "../i18n";
 import "../styles/login.css";
-import LinearGradient from "../components/LinearGradient";
+import Aurora from "../components/Aurora";
 
 export const meta: MetaFunction = () => {
   return [
@@ -26,15 +26,13 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      {/* Animated Background Gradients */}
-      <div className="gradient-background">
-        <LinearGradient
-          size={500}
-          primaryColors={["#0066FF", "#6FFFDC"]}
-          secondaryColors={["#2FCFF2", "#BAEAFF"]}
-          className="gradient-orb gradient-orb-1"
-        />
-      </div>
+      {/* Aurora Background Effect */}
+      <Aurora
+        colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+        blend={0.5}
+        amplitude={1.0}
+        speed={0.5}
+      />
 
       {/* Language Switcher */}
       <div className="language-switcher">
