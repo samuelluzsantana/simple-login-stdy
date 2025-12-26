@@ -20,6 +20,12 @@ export default function Login() {
           secondaryColors={["#2FCFF2", "#BAEAFF"]}
           className="gradient-orb gradient-orb-1"
         />
+        <LinearGradient
+          size={400}
+          primaryColors={["#667eea", "#764ba2"]}
+          secondaryColors={["#f093fb", "#f5576c"]}
+          className="gradient-orb gradient-orb-2"
+        />
       </div>
       {/* Decorative elements */}
       <div className="decoration top-left">
