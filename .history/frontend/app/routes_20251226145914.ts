@@ -2,11 +2,11 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 /**
  * Configuração de Rotas com Suporte a Internacionalização (i18n)
- *
+ * 
  * Estrutura:
  * - Rotas raiz (/) -> Idioma padrão (português)
  * - Rotas com prefixo (/:lang/) -> Idioma dinâmico
- *
+ * 
  * URLs suportadas:
  * - /           -> Login (PT)
  * - /signup     -> Signup (PT)

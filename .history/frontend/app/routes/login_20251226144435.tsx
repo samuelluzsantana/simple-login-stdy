@@ -1,10 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { useLocation, Link } from "react-router";
-import {
-  getLanguageFromPath,
-  getTranslations,
-  getLocalizedPath,
-} from "../i18n";
+import { getLanguageFromPath, getTranslations, getLocalizedPath } from "../i18n";
 import "../styles/login.css";
 import LinearGradient from "../components/LinearGradient";
 

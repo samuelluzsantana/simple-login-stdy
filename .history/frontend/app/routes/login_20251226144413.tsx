@@ -1,10 +1,6 @@
 import type { MetaFunction } from "react-router";
 import { useLocation, Link } from "react-router";
-import {
-  getLanguageFromPath,
-  getTranslations,
-  getLocalizedPath,
-} from "../i18n";
+import { getLanguageFromPath, getTranslations, getLocalizedPath } from "../i18n";
 import "../styles/login.css";
 import LinearGradient from "../components/LinearGradient";
 
@@ -226,7 +222,7 @@ export default function Login() {
           <button
             type="button"
             className="social-button"
-            aria-label={t.loginWithGoogle}
+            aria-label="Login with Google"
           >
             <svg viewBox="0 0 24 24">
               <path
@@ -250,7 +246,7 @@ export default function Login() {
           <button
             type="button"
             className="social-button"
-            aria-label={t.loginWithX}
+            aria-label="Login with X"
           >
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />

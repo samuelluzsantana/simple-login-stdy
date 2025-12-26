@@ -1,28 +1,95 @@
 import type { MetaFunction } from "react-router";
+import { useState } from "react";
 import { useLocation, Link } from "react-router";
-import {
-  getLanguageFromPath,
-  getTranslations,
-  getLocalizedPath,
-} from "../i18n";
+import { getLanguageFromPath, getTranslations, getLocalizedPath } from "../i18n";
+import { createSignupSchema } from "../schemas/signup";
 import "../styles/login.css";
 import LinearGradient from "../components/LinearGradient";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Login - Welcome Back" },
-    { name: "description", content: "Login to your account" },
+    { title: "Create Account" },
+    { name: "description", content: "Create your account" },
   ];
 };
 
-export default function Login() {
+interface FormErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
+export default function Signup() {
   const location = useLocation();
   const lang = getLanguageFromPath(location.pathname);
   const t = getTranslations(lang);
 
-  const signupPath = getLocalizedPath("/signup", lang);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    validateField(name);
+  };
+
+  const validateField = (fieldName: string) => {
+    const schema = createSignupSchema(t);
+    const result = schema.safeParse(formData);
+
+    if (!result.success) {
+      const fieldError = result.error.errors.find(
+        (err) => err.path[0] === fieldName
+      );
+      if (fieldError) {
+        setErrors((prev) => ({ ...prev, [fieldName]: fieldError.message }));
+      }
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const schema = createSignupSchema(t);
+    const result = schema.safeParse(formData);
+
+    if (!result.success) {
+      const newErrors: FormErrors = {};
+      result.error.errors.forEach((err) => {
+        const field = err.path[0] as keyof FormErrors;
+        if (!newErrors[field]) {
+          newErrors[field] = err.message;
+        }
+      });
+      setErrors(newErrors);
+      setTouched({ name: true, email: true, password: true, confirmPassword: true });
+      return;
+    }
+
+    // Form is valid - here you would call the API
+    console.log("Form submitted:", result.data);
+  };
+
+  const loginPath = getLocalizedPath("/", lang);
   const otherLang = lang === "pt" ? "en" : "pt";
-  const switchLangPath = getLocalizedPath("/", otherLang);
+  const switchLangPath = getLocalizedPath("/signup", otherLang);
 
   return (
     <div className="login-container">
@@ -112,7 +179,7 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Login Card */}
+      {/* Signup Card */}
       <div className="login-card">
         {/* Logo */}
         <div className="logo-container">
@@ -152,16 +219,45 @@ export default function Login() {
         </div>
 
         {/* Title */}
-        <h1 className="title">{t.welcomeBack}</h1>
+        <h1 className="title">{t.createAccount}</h1>
         <p className="subtitle">
-          {t.noAccount}{" "}
-          <Link to={signupPath} className="signup-link">
-            {t.signUp}
+          {t.alreadyHaveAccount}{" "}
+          <Link to={loginPath} className="signup-link">
+            {t.signIn}
           </Link>
         </p>
 
         {/* Form */}
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleSubmit} noValidate>
+          {/* Name Field */}
+          <div className="input-group">
+            <span className="input-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="7" r="4" />
+                <path d="M5.5 21a8.5 8.5 0 0117 0" />
+              </svg>
+            </span>
+            <input
+              type="text"
+              name="name"
+              placeholder={t.namePlaceholder}
+              className={`input-field ${touched.name && errors.name ? "input-error" : ""}`}
+              value={formData.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              autoComplete="name"
+            />
+          </div>
+          {touched.name && errors.name && (
+            <p className="field-error">{errors.name}</p>
+          )}
+
+          {/* Email Field */}
           <div className="input-group">
             <span className="input-icon">
               <svg
@@ -176,12 +272,20 @@ export default function Login() {
             </span>
             <input
               type="email"
+              name="email"
               placeholder={t.emailPlaceholder}
-              className="input-field"
+              className={`input-field ${touched.email && errors.email ? "input-error" : ""}`}
+              value={formData.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
               autoComplete="email"
             />
           </div>
+          {touched.email && errors.email && (
+            <p className="field-error">{errors.email}</p>
+          )}
 
+          {/* Password Field */}
           <div className="input-group">
             <span className="input-icon">
               <svg
@@ -196,20 +300,56 @@ export default function Login() {
             </span>
             <input
               type="password"
+              name="password"
               placeholder={t.passwordPlaceholder}
-              className="input-field"
-              autoComplete="current-password"
+              className={`input-field ${touched.password && errors.password ? "input-error" : ""}`}
+              value={formData.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              autoComplete="new-password"
             />
           </div>
+          {touched.password && errors.password && (
+            <p className="field-error">{errors.password}</p>
+          )}
+
+          {/* Confirm Password Field */}
+          <div className="input-group">
+            <span className="input-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
+                <path d="M12 16v2" />
+              </svg>
+            </span>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder={t.confirmPasswordPlaceholder}
+              className={`input-field ${touched.confirmPassword && errors.confirmPassword ? "input-error" : ""}`}
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              autoComplete="new-password"
+            />
+          </div>
+          {touched.confirmPassword && errors.confirmPassword && (
+            <p className="field-error">{errors.confirmPassword}</p>
+          )}
 
           <button type="submit" className="login-button">
-            {t.loginButton}
+            {t.signupButton}
           </button>
         </form>
 
         {/* Divider */}
         <div className="divider">
-          <span>{t.or}</span>
+          <span>{t.orSignUpWith}</span>
         </div>
 
         {/* Social Login */}
